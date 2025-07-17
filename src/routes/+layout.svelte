@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Header from '../components/Header/Header.svelte';
-	import Sidebar from '../components/Sidebar/Sidebar.svelte';
+	import Header from '$components/Header/Header.svelte';
+	import Sidebar from '$components/Sidebar/Sidebar.svelte';
 
 	import { i18n } from '$lib/i18n';
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
@@ -18,15 +18,8 @@
 			<Sidebar />
 		</div>
 
-		<main class="overflow-y-auto p-4">
+		<main class="flex-1 overflow-y-auto p-4">
 			{@render children()}
 		</main>
 	</div>
 </ParaglideJS>
-
-<style>
-	main {
-		flex: 1;
-		padding: 1rem;
-	}
-</style>
