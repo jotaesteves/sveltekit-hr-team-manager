@@ -1,21 +1,38 @@
-<script>
+<script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let potentialIndex = 0;
-	export let performanceIndex = 0;
-	export let reviewScale = 4;
-	export let isDraggable = false;
-	export let isEditable = false;
-	export let equalMembership = '';
-	export let showNames = true;
-	export let memberships = [];
-	export let reviewSettings = {};
-	export let startDrag = () => {};
-	export let selectMembership = () => {};
-	export let deselectMembership = () => {};
-	export let evaluateCriteriaScores = () => {};
+	// Define types
+	interface Membership {
+		id: number | string;
+		firstName?: string;
+		name?: string;
+		score?: {
+			values?: Record<number, number>;
+		};
+		[key: string]: any;
+	}
+
+	interface ReviewSettings {
+		dimensions?: Record<number, { name: string }>;
+		scales?: Record<number, Record<number, Record<number, { name: string }>>>;
+		roles?: Record<number, { name: string }>;
+	}
+
+	export let potentialIndex: number = 0;
+	export let performanceIndex: number = 0;
+	export let reviewScale: number = 4;
+	export let isDraggable: boolean = false;
+	export let isEditable: boolean = false;
+	export let equalMembership: string | number = '';
+	export let showNames: boolean = true;
+	export let memberships: Membership[] = [];
+	export let reviewSettings: ReviewSettings = {};
+	export let startDrag: (event: DragEvent, member: Membership) => void = () => {};
+	export let selectMembership: (event: Event | null, id: string | number) => void = () => {};
+	export let deselectMembership: () => void = () => {};
+	export let evaluateCriteriaScores: () => void = () => {};
 
 	// Constants for roles
 	const ROLES = {
@@ -29,7 +46,7 @@
 	// Computed grid role
 	$: gridRole = (() => {
 		const dimensions = [performanceIndex, potentialIndex].toString();
-		const map = {
+		const map: Record<number, string[][]> = {
 			3: [['1,1'], ['1,3'], ['3,1'], ['1,2', '2,3', '2,2', '3,2', '2,1'], ['3,3']],
 			4: [
 				['1,1', '2,1', '1,2'],
@@ -48,15 +65,15 @@
 		};
 
 		let roleIndex = 0;
-		const scaleMap = map[reviewScale] || map[4];
-		scaleMap.some((colormap, index) => {
+		const scaleMap = map[reviewScale as keyof typeof map] || map[4];
+		scaleMap.some((colormap: string[], index: number) => {
 			if (colormap.includes(dimensions)) {
 				roleIndex = index;
 				return true;
 			}
 		});
 
-		const role = ROLES[roleIndex + 1] || ROLES[1];
+		const role = ROLES[(roleIndex + 1) as keyof typeof ROLES] || ROLES[1];
 		return {
 			...role,
 			name: reviewSettings.roles?.[roleIndex]?.name || role.name
@@ -71,8 +88,8 @@
 
 	let isDragOver = false;
 
-	function employabilityToolTip(d3) {
-		if (d3 === 0) {
+	function employabilityToolTip(d3: number | undefined): string {
+		if (d3 === 0 || !d3) {
 			return `${reviewSettings.dimensions?.[3]?.name || 'Dimension'} is not assessed`;
 		} else {
 			return `${reviewSettings.dimensions?.[3]?.name || 'Dimension'} is ${
@@ -81,7 +98,7 @@
 		}
 	}
 
-	function handleDrop(event) {
+	function handleDrop(event: DragEvent) {
 		event.preventDefault();
 		isDragOver = false;
 		dispatch('drop', {
@@ -91,32 +108,34 @@
 		});
 	}
 
-	function handleDragEnter(event) {
+	function handleDragEnter(event: DragEvent) {
 		event.preventDefault();
 		isDragOver = true;
 		dispatch('dragenter', event);
 	}
 
-	function handleDragOver(event) {
+	function handleDragOver(event: DragEvent) {
 		event.preventDefault();
 		dispatch('dragover', event);
 	}
 
-	function handleDragLeave(event) {
+	function handleDragLeave(event: DragEvent) {
 		event.preventDefault();
 		// Only set isDragOver to false if we're actually leaving the cell
-		if (!event.currentTarget.contains(event.relatedTarget)) {
+		const target = event.currentTarget as HTMLElement;
+		const relatedTarget = event.relatedTarget as Node | null;
+		if (!target.contains(relatedTarget)) {
 			isDragOver = false;
 		}
 	}
 
-	function handleMemberClick(member) {
+	function handleMemberClick(member: Membership) {
 		if (isEditable) {
-			evaluateCriteriaScores(member);
+			evaluateCriteriaScores();
 		}
 	}
 
-	function handleMouseOver(member) {
+	function handleMouseOver(member: Membership) {
 		selectMembership(null, member.id);
 	}
 
@@ -124,14 +143,14 @@
 		deselectMembership();
 	}
 
-	function handleKeyDown(event, member) {
+	function handleKeyDown(event: KeyboardEvent, member: Membership) {
 		if (event.key === 'Enter' || event.key === ' ') {
 			event.preventDefault();
 			handleMemberClick(member);
 		}
 	}
 
-	function handleFocus(member) {
+	function handleFocus(member: Membership) {
 		selectMembership(null, member.id);
 	}
 

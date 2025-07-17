@@ -173,28 +173,30 @@
 			}
 		});
 
-		return totalWeight > 0 ? (totalScore / totalWeight).toFixed(1) : 0;
+		return totalWeight > 0 ? (totalScore / totalWeight).toFixed(1) : '0';
 	}
 
 	/**
-	 * @param {number} score
+	 * @param {string | number} score
 	 */
 	function getScoreColor(score) {
-		if (score >= 4.5) return 'bg-green-500';
-		if (score >= 3.5) return 'bg-blue-500';
-		if (score >= 2.5) return 'bg-yellow-500';
-		if (score >= 1.5) return 'bg-orange-500';
+		const numScore = typeof score === 'string' ? parseFloat(score) : score;
+		if (numScore >= 4.5) return 'bg-green-500';
+		if (numScore >= 3.5) return 'bg-blue-500';
+		if (numScore >= 2.5) return 'bg-yellow-500';
+		if (numScore >= 1.5) return 'bg-orange-500';
 		return 'bg-red-500';
 	}
 
 	/**
-	 * @param {number} score
+	 * @param {string | number} score
 	 */
 	function getScoreLabel(score) {
-		if (score >= 4.5) return 'Excellent';
-		if (score >= 3.5) return 'Good';
-		if (score >= 2.5) return 'Average';
-		if (score >= 1.5) return 'Below Average';
+		const numScore = typeof score === 'string' ? parseFloat(score) : score;
+		if (numScore >= 4.5) return 'Excellent';
+		if (numScore >= 3.5) return 'Good';
+		if (numScore >= 2.5) return 'Average';
+		if (numScore >= 1.5) return 'Below Average';
 		return 'Poor';
 	}
 
@@ -327,11 +329,8 @@
 						{memberships}
 						{isDraggable}
 						{isEditable}
-						{scale}
-						{scaleColors}
 						{showNames}
 						hideTitle={false}
-						reviewRoles={{}}
 						on:drop-member={handleMemberDrop}
 						on:selected-member={(e) => console.log('Member selected:', e.detail)}
 						on:open-membership-evaluation-dialog={(e) => console.log('Open evaluation:', e.detail)}

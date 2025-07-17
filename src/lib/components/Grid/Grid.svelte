@@ -1,21 +1,41 @@
-<script>
+<script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import GridCell from './GridCell.svelte';
 
 	const dispatch = createEventDispatcher();
 
-	export let reviewSettings = {};
-	export let review = {};
-	export let reviewScale = 4;
-	export let memberships = [];
-	export let isDraggable = false;
-	export let isEditable = false;
-	export let scale = {};
-	export let scaleColors = {};
-	export let equalMembership = '';
-	export let showNames = true;
-	export let hideTitle = false;
-	export let reviewRoles = {};
+	// Define types for better type safety
+	interface ReviewSettings {
+		scales?: Record<number, Record<number, Record<number, { name: string }>>>;
+		dimensions?: Record<number, { name: string }>;
+		roles?: Record<number, { name: string }>;
+	}
+
+	interface Review {
+		createdAt?: string | Date;
+		reviewerName?: string;
+		name?: string;
+		reviewName?: string;
+		type?: string;
+	}
+
+	interface Membership {
+		id: number | string;
+		[key: string]: any;
+	}
+
+	export let reviewSettings: ReviewSettings = {};
+	export let review: Review = {};
+	export let reviewScale: number = 4;
+	export let memberships: Membership[] = [];
+	export let isDraggable: boolean = false;
+	export let isEditable: boolean = false;
+	export let equalMembership: string = '';
+	export let showNames: boolean = true;
+	export let hideTitle: boolean = false;
+	// Remove unused exports
+	// export let scale: Record<string, any> = {};
+	// export let scaleColors: Record<string, any> = {};
 
 	// Computed values with safe defaults
 	$: reviewSettingsScale = reviewSettings?.scales?.[reviewScale]?.[1] || {
@@ -38,20 +58,24 @@
 	};
 
 	// Event handlers
-	function startDrag(event, member) {
+	function startDrag(event: DragEvent, member: Membership) {
+		if (!event.dataTransfer) return;
+
 		event.dataTransfer.dropEffect = 'move';
 		event.dataTransfer.effectAllowed = 'move';
 
 		// Store both the full member object and just the ID as backup
 		event.dataTransfer.setData('membership', JSON.stringify(member));
-		event.dataTransfer.setData('membershipId', member.membershipId || member.id);
+		event.dataTransfer.setData('membershipId', String(member.membershipId || member.id));
 
 		console.log('Starting drag for member:', member.firstName || member.name);
 	}
 
-	function onDrop(event, d1, d2) {
+	function onDrop(event: DragEvent, d1: number, d2: number) {
 		event.preventDefault();
 		try {
+			if (!event.dataTransfer) return;
+
 			const membershipData = event.dataTransfer.getData('membership');
 			const membershipId = event.dataTransfer.getData('membershipId');
 
@@ -81,36 +105,31 @@
 		}
 	}
 
-	function evaluateCriteriaScores(member) {
-		dispatch('open-membership-evaluation-dialog', member);
+	function evaluateCriteriaScores() {
+		// This function is meant to be overridden by parent components
+		dispatch('open-membership-evaluation-dialog');
 	}
 
-	function selectMembership(event, membership) {
-		dispatch('selected-member', membership);
+	function selectMembership(event: Event | null, membership: string | number) {
+		dispatch('selectMembership', { event, membership });
 	}
 
 	function deselectMembership() {
-		dispatch('selected-member', '');
+		dispatch('deselectMembership');
 	}
 
-	function dateTime(date) {
-		try {
-			return new Date(date).toLocaleDateString('en-US', {
-				year: 'numeric',
-				month: 'long',
-				day: 'numeric'
-			});
-		} catch (e) {
-			return 'Invalid Date';
-		}
+	function dateTime(date: string | Date | null | undefined): string {
+		if (!date) return '';
+		const d = new Date(date);
+		return d.toLocaleString();
 	}
 
-	function handleDragEnter(event) {
-		event.preventDefault();
+	function handleDragEnter(event: CustomEvent) {
+		event.detail?.preventDefault?.();
 	}
 
-	function handleDragOver(event) {
-		event.preventDefault();
+	function handleDragOver(event: CustomEvent) {
+		event.detail?.preventDefault?.();
 	}
 </script>
 
@@ -127,7 +146,7 @@
 				{/if}
 				<th class="scalelabel">
 					<span class="rotate">
-						{reviewSettingsScalePotential[potential]?.name || `Level ${potential}`}
+						{reviewSettingsScalePotential[parseInt(potential)]?.name || `Level ${potential}`}
 					</span>
 				</th>
 				{#each Object.keys(reviewSettingsScale) as performance, performanceindex}
@@ -137,8 +156,6 @@
 						{showNames}
 						{isDraggable}
 						{isEditable}
-						{scale}
-						{scaleColors}
 						{reviewScale}
 						{evaluateCriteriaScores}
 						{selectMembership}
@@ -173,7 +190,7 @@
 			<td colspan="2"></td>
 			{#each Object.keys(reviewSettingsScalePerfomance) as performance}
 				<th>
-					{reviewSettingsScalePerfomance[performance]?.name || `Level ${performance}`}
+					{reviewSettingsScalePerfomance[parseInt(performance)]?.name || `Level ${performance}`}
 				</th>
 			{/each}
 		</tr>

@@ -1,5 +1,9 @@
 # SvelteKit HR Team Manager
 
+[![Deploy to GitHub Pages](https://github.com/jotaesteves/sveltekit-hr-team-manager/actions/workflows/deploy.yml/badge.svg)](https://github.com/jotaesteves/sveltekit-hr-team-manager/actions/workflows/deploy.yml)
+[![CI](https://github.com/jotaesteves/sveltekit-hr-team-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/jotaesteves/sveltekit-hr-team-manager/actions/workflows/ci.yml)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://jotaesteves.github.io/sveltekit-hr-team-manager/)
+
 A modern, comprehensive HR management application built with SvelteKit, TypeScript, and Tailwind CSS. This application provides a complete solution for managing team performance, conducting reviews, and tracking employee development.
 
 ## 🚀 Features
@@ -183,14 +187,46 @@ Organized sidebar navigation with sections:
 
 ## 🚀 Deployment
 
+### GitHub Pages (Automatic)
+
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions.
+
+**Live Demo**: `https://jotaesteves.github.io/sveltekit-hr-team-manager/`
+
+The deployment workflow:
+
+1. **Triggers**: Automatically deploys on push to `main` branch
+2. **Quality Checks**: Runs TypeScript checking and linting
+3. **Build**: Creates optimized static build with proper base path
+4. **Deploy**: Publishes to GitHub Pages
+
+### Manual Deployment Options
+
 The application is built with SvelteKit's adapter-auto, which automatically selects the appropriate adapter for your deployment platform.
 
 Popular deployment options:
 
+- **GitHub Pages**: Automatic CI/CD deployment (configured)
 - **Vercel**: Zero-config deployment
 - **Netlify**: Static site hosting
 - **Node.js**: Self-hosted with adapter-node
 - **Docker**: Containerized deployment
+
+### CI/CD Pipeline
+
+The project includes comprehensive CI/CD workflows:
+
+- **Continuous Integration** (`ci.yml`): Runs on PRs and develop branch
+
+  - Type checking with `svelte-check`
+  - Code linting with ESLint and Prettier
+  - End-to-end testing with Playwright
+  - Test result artifacts upload
+
+- **Deployment** (`deploy.yml`): Runs on main branch
+  - Quality checks before deployment
+  - Optimized build generation
+  - Automatic GitHub Pages deployment
 
 ## 🤝 Contributing
 
