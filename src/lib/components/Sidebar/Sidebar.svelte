@@ -30,7 +30,16 @@
 	 * @param {string} route
 	 */
 	function isActive(route) {
-		return $page.url.pathname === route;
+		const pathname = $page.url.pathname;
+		
+		// If base is empty (development), compare directly
+		if (!base) {
+			return pathname === route;
+		}
+		
+		// In production with base path, remove base from pathname for comparison
+		const currentPath = pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
+		return currentPath === route || (route === '/' && currentPath === '');
 	}
 </script>
 

@@ -15,18 +15,24 @@ const config = {
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
-			fallback: undefined,
+			fallback: '404.html',
 			precompress: false,
 			strict: true
 		}),
 		paths: {
-			base: dev ? '' : (process.env.BASE_PATH ?? '')
+			base: dev ? '' : (process.env.BASE_PATH || '/sveltekit-hr-team-manager')
 		},
 		prerender: {
 			handleHttpError: ({ path, message }) => {
 				// Ignore 404 errors for the root path when using a base path in production
 				if (path === '/' && !dev && process.env.BASE_PATH) {
 					console.warn(`Ignoring 404 for root path '/' - this is expected when using BASE_PATH`);
+					return;
+				}
+				// Ignore 404 errors for paths that don't start with base path
+				const basePath = process.env.BASE_PATH || '/sveltekit-hr-team-manager';
+				if (!dev && !path.startsWith(basePath) && path !== '/') {
+					console.warn(`Ignoring 404 for path '${path}' - doesn't match base path '${basePath}'`);
 					return;
 				}
 				// For any other errors, throw to fail the build
