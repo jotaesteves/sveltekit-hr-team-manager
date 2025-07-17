@@ -1,0 +1,63 @@
+# TODO:
+
+- [x] Install Terminal
+- [x] Configure Zed IDE settings
+- [x] Create Repository
+    - [ ] Download GPG key via `brew`and generate gpg key to apply to the litlynx repository
+- [x] Use SvelteKit for the frontend
+- [x] Use TailwindCSS for the styling
+
+
+- [x] Routes
+    - [x] /people
+    - [x] /evaluation-criterias
+    - [x] /reviews
+    - [x] /feedback
+    - [x] /1on1
+    - [x] /performance-reviews
+    - [x] /import-export
+    - [x] /modules
+    - [x] /settings
+    - [x] /tutorial
+    - [x] /grid
+
+- [ ] Use Supabase for the backend
+- [ ] Use Vercel for the deployment
+- [ ] Use GitHub for the version control
+
+- [ ] Push code to Litlynx Repository
+
+- [x] Start the project
+- [ ] Build the Correct structure for the use case of the project
+- [ ]
+- [ ] Port the tecnology in a simplified manner
+
+
+--- Code structure
+
+- Core components CRUD application
+- Table first with actions
+- Separate business logic into state management
+
+
+- Navigation
+- components:
+    People
+    Evaluation Criterias
+    Reviews
+
+    Flows of management
+
+    Company management
+
+    Dialogs / feedback, 1on1, performance reviews
+    Import / Export data tables ( CSV, Excel )
+    Modules ?
+    Settings / configurations
+
+    Tutorial / Documents of help FAQ
+
+    Grid ( the main star APP of this )
+
+
+# 1
