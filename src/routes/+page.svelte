@@ -1,5 +1,6 @@
 <script>
 	import { dashboardStats, peopleStore, reviewsStore, feedbackStore } from '../stores/dataStore.js';
+	import { base } from '$app/paths';
 
 	// Dashboard data from stores
 	$: stats = $dashboardStats;
@@ -173,7 +174,9 @@
 				<p class="text-sm text-gray-600">
 					Add your employees and define their roles in the People section
 				</p>
-				<a href="/people" class="text-sm text-blue-500 hover:text-blue-700">Go to People →</a>
+				<a href={`${base}/people`} class="text-sm text-blue-500 hover:text-blue-700"
+					>Go to People →</a
+				>
 			</div>
 			<div class="p-4 text-center">
 				<div class="mb-3 text-4xl">2️⃣</div>
@@ -181,7 +184,7 @@
 				<p class="text-sm text-gray-600">
 					Create the criteria that will be used for performance evaluations
 				</p>
-				<a href="/evaluation-criterias" class="text-sm text-blue-500 hover:text-blue-700"
+				<a href={`${base}/evaluation-criterias`} class="text-sm text-blue-500 hover:text-blue-700"
 					>Setup Criteria →</a
 				>
 			</div>
@@ -191,7 +194,7 @@
 				<p class="text-sm text-gray-600">
 					Use the Performance Grid to conduct comprehensive evaluations
 				</p>
-				<a href="/grid" class="text-sm text-blue-500 hover:text-blue-700">Open Grid →</a>
+				<a href={`${base}/grid`} class="text-sm text-blue-500 hover:text-blue-700">Open Grid →</a>
 			</div>
 		</div>
 	</div>

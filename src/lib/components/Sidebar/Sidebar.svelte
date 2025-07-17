@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import { base } from '$app/paths';
 
 	// Navigation structure
 	export let core = [
@@ -51,7 +52,7 @@
 				{#each core as item}
 					<li>
 						<a
-							href={item.route}
+							href={`${base}${item.route}`}
 							class="flex items-center rounded-lg px-3 py-2 text-sm transition-colors duration-200 {isActive(
 								item.route
 							)
@@ -73,7 +74,7 @@
 				{#each workflow as item}
 					<li>
 						<a
-							href={item.route}
+							href={`${base}${item.route}`}
 							class="flex items-center rounded-lg px-3 py-2 text-sm transition-colors duration-200 {isActive(
 								item.route
 							)
@@ -95,7 +96,7 @@
 				{#each management as item}
 					<li>
 						<a
-							href={item.route}
+							href={`${base}${item.route}`}
 							class="flex items-center rounded-lg px-3 py-2 text-sm transition-colors duration-200 {isActive(
 								item.route
 							)
@@ -119,7 +120,7 @@
 				{#each help as item}
 					<li>
 						<a
-							href={item.route}
+							href={`${base}${item.route}`}
 							class="flex items-center rounded-lg px-3 py-2 text-sm transition-colors duration-200 {isActive(
 								item.route
 							)
