@@ -250,3 +250,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 > Built with ❤️ using SvelteKit and modern web technologies
+> by [Jorge Esteves](https://github.com/jotaesteves).
+> Contributions and feedback are welcome!
