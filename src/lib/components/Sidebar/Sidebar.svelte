@@ -44,7 +44,7 @@
 	<nav class="mt-6">
 		<!-- Core Features -->
 		<div class="mb-6 px-4">
-			<h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+			<h2 class="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">
 				Core Features
 			</h2>
 			<ul class="space-y-1">
@@ -68,7 +68,7 @@
 
 		<!-- Workflow -->
 		<div class="mb-6 px-4">
-			<h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Workflow</h2>
+			<h2 class="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">Workflow</h2>
 			<ul class="space-y-1">
 				{#each workflow as item}
 					<li>
@@ -90,7 +90,7 @@
 
 		<!-- Management -->
 		<div class="mb-6 px-4">
-			<h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">Management</h2>
+			<h2 class="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">Management</h2>
 			<ul class="space-y-1">
 				{#each management as item}
 					<li>
@@ -112,7 +112,7 @@
 
 		<!-- Help & Support -->
 		<div class="mb-6 px-4">
-			<h2 class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+			<h2 class="mb-3 text-xs font-semibold tracking-wider text-gray-400 uppercase">
 				Help & Support
 			</h2>
 			<ul class="space-y-1">

@@ -177,7 +177,7 @@ Advanced data table component featuring:
 Organized sidebar navigation with sections:
 
 - **Core Features**: Dashboard, Performance Grid, People, Criteria, Reviews
-- **Workflow**: Feedback, One-on-One, Performance Reviews  
+- **Workflow**: Feedback, One-on-One, Performance Reviews
 - **Management**: Import/Export, Modules, Settings
 - **Help**: Tutorial and documentation
 

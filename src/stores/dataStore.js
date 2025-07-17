@@ -30,13 +30,12 @@ const createPeopleStore = () => {
 	return {
 		subscribe,
 		/** @param {any} person */
-		add: (person) => update(people => [...people, { ...person, id: Date.now() }]),
+		add: (person) => update((people) => [...people, { ...person, id: Date.now() }]),
 		/** @param {any} updatedPerson */
-		update: (updatedPerson) => update(people => 
-			people.map(p => p.id === updatedPerson.id ? updatedPerson : p)
-		),
+		update: (updatedPerson) =>
+			update((people) => people.map((p) => (p.id === updatedPerson.id ? updatedPerson : p))),
 		/** @param {number} id */
-		remove: (id) => update(people => people.filter(p => p.id !== id)),
+		remove: (id) => update((people) => people.filter((p) => p.id !== id)),
 		reset: () => set([])
 	};
 };
@@ -46,20 +45,26 @@ const createCriteriaStore = () => {
 	const { subscribe, set, update } = writable([
 		{ id: 1, name: 'Teamwork', description: 'Ability to work in a team', weight: 20 },
 		{ id: 2, name: 'Communication', description: 'Effectiveness in communication', weight: 25 },
-		{ id: 3, name: 'Technical Skills', description: 'Technical competency and expertise', weight: 30 },
+		{
+			id: 3,
+			name: 'Technical Skills',
+			description: 'Technical competency and expertise',
+			weight: 30
+		},
 		{ id: 4, name: 'Leadership', description: 'Leadership qualities and potential', weight: 25 }
 	]);
 
 	return {
 		subscribe,
 		/** @param {any} criteria */
-		add: (criteria) => update(criterias => [...criterias, { ...criteria, id: Date.now() }]),
+		add: (criteria) => update((criterias) => [...criterias, { ...criteria, id: Date.now() }]),
 		/** @param {any} updatedCriteria */
-		update: (updatedCriteria) => update(criterias => 
-			criterias.map(c => c.id === updatedCriteria.id ? updatedCriteria : c)
-		),
+		update: (updatedCriteria) =>
+			update((criterias) =>
+				criterias.map((c) => (c.id === updatedCriteria.id ? updatedCriteria : c))
+			),
 		/** @param {number} id */
-		remove: (id) => update(criterias => criterias.filter(c => c.id !== id)),
+		remove: (id) => update((criterias) => criterias.filter((c) => c.id !== id)),
 		reset: () => set([])
 	};
 };
@@ -94,13 +99,12 @@ const createReviewsStore = () => {
 	return {
 		subscribe,
 		/** @param {any} review */
-		add: (review) => update(reviews => [...reviews, { ...review, id: Date.now() }]),
+		add: (review) => update((reviews) => [...reviews, { ...review, id: Date.now() }]),
 		/** @param {any} updatedReview */
-		update: (updatedReview) => update(reviews => 
-			reviews.map(r => r.id === updatedReview.id ? updatedReview : r)
-		),
+		update: (updatedReview) =>
+			update((reviews) => reviews.map((r) => (r.id === updatedReview.id ? updatedReview : r))),
 		/** @param {number} id */
-		remove: (id) => update(reviews => reviews.filter(r => r.id !== id)),
+		remove: (id) => update((reviews) => reviews.filter((r) => r.id !== id)),
 		reset: () => set([])
 	};
 };
@@ -125,13 +129,14 @@ const createFeedbackStore = () => {
 	return {
 		subscribe,
 		/** @param {any} feedback */
-		add: (feedback) => update(feedbacks => [...feedbacks, { ...feedback, id: Date.now() }]),
+		add: (feedback) => update((feedbacks) => [...feedbacks, { ...feedback, id: Date.now() }]),
 		/** @param {any} updatedFeedback */
-		update: (updatedFeedback) => update(feedbacks => 
-			feedbacks.map(f => f.id === updatedFeedback.id ? updatedFeedback : f)
-		),
+		update: (updatedFeedback) =>
+			update((feedbacks) =>
+				feedbacks.map((f) => (f.id === updatedFeedback.id ? updatedFeedback : f))
+			),
 		/** @param {number} id */
-		remove: (id) => update(feedbacks => feedbacks.filter(f => f.id !== id)),
+		remove: (id) => update((feedbacks) => feedbacks.filter((f) => f.id !== id)),
 		reset: () => set([])
 	};
 };
@@ -143,34 +148,35 @@ const createPerformanceGridStore = () => {
 
 	return {
 		subscribe,
-		/** 
-		 * @param {number} employeeId 
-		 * @param {number} criteriaId 
-		 * @param {number} score 
-		 * @param {string} notes 
+		/**
+		 * @param {number} employeeId
+		 * @param {number} criteriaId
+		 * @param {number} score
+		 * @param {string} notes
 		 */
-		updateScore: (employeeId, criteriaId, score, notes = '') => update(grid => ({
-			...grid,
-			[employeeId]: {
-				...grid[employeeId],
-				[criteriaId]: {
-					score,
-					notes,
-					lastUpdated: new Date().toISOString().split('T')[0],
-					evaluatedBy: 'Current User'
+		updateScore: (employeeId, criteriaId, score, notes = '') =>
+			update((grid) => ({
+				...grid,
+				[employeeId]: {
+					...grid[employeeId],
+					[criteriaId]: {
+						score,
+						notes,
+						lastUpdated: new Date().toISOString().split('T')[0],
+						evaluatedBy: 'Current User'
+					}
 				}
-			}
-		})),
-		/** 
-		 * @param {any[]} employees 
-		 * @param {any[]} criteria 
+			})),
+		/**
+		 * @param {any[]} employees
+		 * @param {any[]} criteria
 		 */
 		initializeGrid: (employees, criteria) => {
 			/** @type {Record<number, Record<number, {score: number, notes: string, lastUpdated: string, evaluatedBy: string}>>} */
 			const newGrid = {};
-			employees.forEach(emp => {
+			employees.forEach((emp) => {
 				newGrid[emp.id] = {};
-				criteria.forEach(crit => {
+				criteria.forEach((crit) => {
 					newGrid[emp.id][crit.id] = {
 						score: Math.floor(Math.random() * 5) + 1,
 						notes: '',
@@ -197,18 +203,19 @@ const createSettingsStore = () => {
 
 	return {
 		subscribe,
-		/** 
-		 * @param {string} key 
-		 * @param {any} value 
+		/**
+		 * @param {string} key
+		 * @param {any} value
 		 */
-		updateSetting: (key, value) => update(settings => ({ ...settings, [key]: value })),
-		reset: () => set({
-			companyName: 'Acme Corporation',
-			reviewCycle: 'Quarterly',
-			enableNotifications: true,
-			defaultTheme: 'light',
-			sessionTimeout: 30
-		})
+		updateSetting: (key, value) => update((settings) => ({ ...settings, [key]: value })),
+		reset: () =>
+			set({
+				companyName: 'Acme Corporation',
+				reviewCycle: 'Quarterly',
+				enableNotifications: true,
+				defaultTheme: 'light',
+				sessionTimeout: 30
+			})
 	};
 };
 
@@ -229,16 +236,16 @@ export const dashboardStats = writable({
 });
 
 // Update dashboard stats when other stores change
-peopleStore.subscribe(people => {
-	dashboardStats.update(stats => ({ ...stats, totalEmployees: people.length }));
+peopleStore.subscribe((people) => {
+	dashboardStats.update((stats) => ({ ...stats, totalEmployees: people.length }));
 });
 
-reviewsStore.subscribe(reviews => {
-	const activeReviews = reviews.filter(r => r.status === 'In Progress').length;
-	dashboardStats.update(stats => ({ ...stats, activeReviews }));
+reviewsStore.subscribe((reviews) => {
+	const activeReviews = reviews.filter((r) => r.status === 'In Progress').length;
+	dashboardStats.update((stats) => ({ ...stats, activeReviews }));
 });
 
-feedbackStore.subscribe(feedbacks => {
-	const pendingFeedback = feedbacks.filter(f => f.status === 'Pending').length;
-	dashboardStats.update(stats => ({ ...stats, pendingFeedback }));
+feedbackStore.subscribe((feedbacks) => {
+	const pendingFeedback = feedbacks.filter((f) => f.status === 'Pending').length;
+	dashboardStats.update((stats) => ({ ...stats, pendingFeedback }));
 });
