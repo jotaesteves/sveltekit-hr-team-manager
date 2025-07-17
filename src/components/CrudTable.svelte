@@ -42,6 +42,23 @@
 	export let showAddRow = false;
 
 	/**
+	 * @type {string}
+	 */
+	let searchTerm = '';
+
+	/**
+	 * @type {any[]}
+	 */
+	$: filteredItems = searchTerm
+		? items.filter(item => 
+			columns.some(col => 
+				item[col.key] && 
+				item[col.key].toString().toLowerCase().includes(searchTerm.toLowerCase())
+			)
+		)
+		: items;
+
+	/**
 	 * @param {{ id?: any; }} item
 	 */
 	function startEdit(item) {
@@ -93,6 +110,31 @@
 	</div>
 {/if}
 
+<!-- Search functionality -->
+<div class="mb-4 flex items-center justify-between">
+	<div class="flex-1 max-w-md">
+		<input
+			type="text"
+			placeholder="Search..."
+			bind:value={searchTerm}
+			class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+		/>
+	</div>
+	<div class="flex items-center space-x-4">
+		<span class="text-sm text-gray-600">
+			Showing {filteredItems.length} of {items.length} items
+		</span>
+		{#if searchTerm}
+			<button
+				on:click={() => searchTerm = ''}
+				class="rounded-md bg-gray-100 px-3 py-2 text-gray-600 hover:bg-gray-200"
+			>
+				Clear
+			</button>
+		{/if}
+	</div>
+</div>
+
 <div class="overflow-x-auto rounded-lg bg-white shadow-md">
 	<table class="min-w-full">
 		<thead class="bg-gray-100">
@@ -108,13 +150,42 @@
 				<tr class="bg-blue-50">
 					{#each columns as col}
 						<td class="px-4 py-3">
-							<input
-								type={col.type || 'text'}
-								placeholder={col.placeholder || col.label}
-								bind:value={newItem[col.key]}
-								required={col.required || false}
-								class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-							/>
+							{#if col.type === 'checkbox'}
+								<input
+									type="checkbox"
+									bind:checked={newItem[col.key]}
+									class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+								/>
+							{:else if col.type === 'select'}
+								<select
+									bind:value={newItem[col.key]}
+									required={col.required || false}
+									class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+								>
+									<option value="">Select {col.label}</option>
+									{#if col.options}
+										{#each col.options as option}
+											<option value={option.value}>{option.label}</option>
+										{/each}
+									{/if}
+								</select>
+							{:else if col.type === 'textarea'}
+								<textarea
+									placeholder={col.placeholder || col.label}
+									bind:value={newItem[col.key]}
+									required={col.required || false}
+									rows="2"
+									class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-y"
+								></textarea>
+							{:else}
+								<input
+									type={col.type || 'text'}
+									placeholder={col.placeholder || col.label}
+									bind:value={newItem[col.key]}
+									required={col.required || false}
+									class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+								/>
+							{/if}
 						</td>
 					{/each}
 					<td class="px-4 py-3">
@@ -127,17 +198,46 @@
 					</td>
 				</tr>
 			{/if}
-			{#each items as item}
+			{#each filteredItems as item}
 				<tr class="hover:bg-gray-50">
 					{#if editingId === item.id}
 						{#each columns as col}
 							<td class="px-4 py-3">
-								<input
-									type={col.type || 'text'}
-									bind:value={editItem[col.key]}
-									required={col.required || false}
-									class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-								/>
+								{#if col.type === 'checkbox'}
+									<input
+										type="checkbox"
+										bind:checked={editItem[col.key]}
+										required={col.required || false}
+										class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+									/>
+								{:else if col.type === 'select'}
+									<select
+										bind:value={editItem[col.key]}
+										required={col.required || false}
+										class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+									>
+										<option value="">Select {col.label}</option>
+										{#if col.options}
+											{#each col.options as option}
+												<option value={option.value}>{option.label}</option>
+											{/each}
+										{/if}
+									</select>
+								{:else if col.type === 'textarea'}
+									<textarea
+										bind:value={editItem[col.key]}
+										required={col.required || false}
+										rows="2"
+										class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-y"
+									></textarea>
+								{:else}
+									<input
+										type={col.type || 'text'}
+										bind:value={editItem[col.key]}
+										required={col.required || false}
+										class="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+									/>
+								{/if}
 							</td>
 						{/each}
 						<td class="px-4 py-3">
@@ -152,7 +252,38 @@
 						</td>
 					{:else}
 						{#each columns as col}
-							<td class="px-4 py-3">{item[col.key]}</td>
+							<td class="px-4 py-3">
+								{#if col.type === 'checkbox'}
+									<span class="inline-flex items-center">
+										{#if item[col.key]}
+											<span class="text-green-600">✓ Yes</span>
+										{:else}
+											<span class="text-gray-400">✗ No</span>
+										{/if}
+									</span>
+								{:else if col.type === 'select' && col.options}
+									{#if item[col.key]}
+										{@const option = col.options.find(/** @param {any} opt */ opt => opt.value === item[col.key])}
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+											{option ? option.label : item[col.key]}
+										</span>
+									{:else}
+										<span class="text-gray-400">-</span>
+									{/if}
+								{:else if col.type === 'textarea'}
+									{#if item[col.key]}
+										<div class="max-w-xs">
+											<span class="text-sm text-gray-900" title={item[col.key]}>
+												{item[col.key].length > 100 ? item[col.key].slice(0, 100) + '...' : item[col.key]}
+											</span>
+										</div>
+									{:else}
+										<span class="text-gray-400">-</span>
+									{/if}
+								{:else}
+									{item[col.key] || '-'}
+								{/if}
+							</td>
 						{/each}
 						<td class="px-4 py-3">
 							<div class="flex space-x-2">

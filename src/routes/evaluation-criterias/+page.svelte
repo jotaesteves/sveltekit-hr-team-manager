@@ -1,43 +1,41 @@
 <script>
 	import CrudTable from '$components/CrudTable.svelte';
+	import { criteriaStore } from '../../stores/dataStore.js';
 
-	// Example initial data for evaluation criterias
-	let criterias = [
-		{ id: 1, name: 'Teamwork', description: 'Ability to work in a team' },
-		{ id: 2, name: 'Communication', description: 'Effectiveness in communication' }
-	];
+	// Use the criteria store
+	$: criterias = $criteriaStore;
 
-	// Handler functions for CRUD operations
+	// Handler functions for CRUD operations using the store
 	/**
-	 * @param {{ id: number; name: string; description: string; }} newCriteria
+	 * @param {any} newCriteria
 	 */
 	function handleCreate(newCriteria) {
-		criterias = [...criterias, { ...newCriteria, id: Date.now() }];
+		criteriaStore.add(newCriteria);
 	}
 
 	/**
-	 * @param {{ id: number; }} updatedCriteria
+	 * @param {any} updatedCriteria
 	 */
 	function handleUpdate(updatedCriteria) {
-		criterias = criterias.map((c) =>
-			c.id === updatedCriteria.id ? { ...c, ...updatedCriteria } : c
-		);
+		criteriaStore.update(updatedCriteria);
 	}
 
 	/**
 	 * @param {number} id
 	 */
 	function handleDelete(id) {
-		criterias = criterias.filter((c) => c.id !== id);
+		criteriaStore.remove(id);
 	}
 </script>
 
-<h1>Evaluation Criterias</h1>
 <CrudTable
+	title="Evaluation Criterias"
+	addButtonText="Add New Criteria"
 	items={criterias}
 	columns={[
-		{ key: 'name', label: 'Name' },
-		{ key: 'description', label: 'Description' }
+		{ key: 'name', label: 'Name', placeholder: 'Enter criteria name' },
+		{ key: 'description', label: 'Description', placeholder: 'Enter criteria description' },
+		{ key: 'weight', label: 'Weight (%)', type: 'number', placeholder: 'Enter weight percentage' }
 	]}
 	onCreate={handleCreate}
 	onUpdate={handleUpdate}

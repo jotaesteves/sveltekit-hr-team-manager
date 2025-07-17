@@ -1,98 +1,127 @@
 <script>
+	import { page } from '$app/stores';
+
+	// Navigation structure
 	export let core = [
-		{ name: 'People', route: '/people' },
-		{ name: 'Evaluation Criterias', route: '/evaluation-criterias' },
-		{ name: 'Reviews', route: '/reviews' }
+		{ name: 'Dashboard', route: '/', icon: '🏠' },
+		{ name: 'Performance Grid', route: '/grid', icon: '📊' },
+		{ name: 'People', route: '/people', icon: '👥' },
+		{ name: 'Evaluation Criterias', route: '/evaluation-criterias', icon: '📋' },
+		{ name: 'Reviews', route: '/reviews', icon: '📝' }
 	];
+	
+	export let workflow = [
+		{ name: 'Feedback', route: '/feedback', icon: '💬' },
+		{ name: 'One-on-One', route: '/one-on-one', icon: '👥' },
+		{ name: 'Performance Reviews', route: '/performance-reviews', icon: '⭐' }
+	];
+	
 	export let management = [
-		{ name: 'Flows of Management', route: '/flows-management' },
-		{ name: 'Company management', route: '/company-management' },
-		{ name: 'Settings', route: '/settings' }
+		{ name: 'Import/Export', route: '/import-export', icon: '📥' },
+		{ name: 'Modules', route: '/modules', icon: '🧩' },
+		{ name: 'Settings', route: '/settings', icon: '⚙️' }
 	];
-	export let feedback = [
-		{ name: 'Dialogs', route: '/dialogs' },
-		{ name: 'Feedback', route: '/feedback' },
-		{ name: '1on1', route: '/one-on-one' },
-		{ name: 'Performance Reviews', route: '/performance-reviews' }
+	
+	export let help = [
+		{ name: 'Tutorial', route: '/tutorial', icon: '📚' }
 	];
-	export const settings = [
-		{ name: 'Settings / Configurations', route: '/settings/configurations' },
-		{ name: 'Import / Export data tables (CSV, Excel)', route: '/settings/import-export' },
-		{ name: 'Modules', route: '/settings/modules' },
-		{ name: 'Roles', route: '/settings/roles' },
-		{ name: 'Permissions', route: '/settings/permissions' }
-	];
-	export const tutorial = [
-		{ name: 'Tutorial', route: '/tutorial' },
-		{ name: 'FAQ', route: '/faq' },
-		{ name: 'Support', route: '/support' },
-		{ name: 'Contact', route: '/contact' }
-	];
-	export const mainFeatures = [{ name: 'Grid', route: '/grid' }];
-	// export const navigationList = [...coreItems, ...managementItems];
+
+	// Check if route is active
+	/**
+	 * @param {string} route
+	 */
+	function isActive(route) {
+		return $page.url.pathname === route;
+	}
 </script>
 
-<aside>
-	<ul>
-		{#each core as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+<aside class="w-64 bg-gray-800 text-white h-full overflow-y-auto">
+	<!-- Logo/Header -->
+	<div class="p-6 border-b border-gray-700">
+		<h1 class="text-xl font-bold text-white">HR Manager</h1>
+		<p class="text-sm text-gray-300">Team Performance Tool</p>
+	</div>
 
-	<ul>
-		{#each management as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+	<!-- Navigation Sections -->
+	<nav class="mt-6">
+		<!-- Core Features -->
+		<div class="px-4 mb-6">
+			<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Core Features</h2>
+			<ul class="space-y-1">
+				{#each core as item}
+					<li>
+						<a 
+							href={item.route} 
+							class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors duration-200 {isActive(item.route) ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
+						>
+							<span class="mr-3">{item.icon}</span>
+							{item.name}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
 
-	<ul>
-		{#each feedback as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+		<!-- Workflow -->
+		<div class="px-4 mb-6">
+			<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Workflow</h2>
+			<ul class="space-y-1">
+				{#each workflow as item}
+					<li>
+						<a 
+							href={item.route} 
+							class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors duration-200 {isActive(item.route) ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
+						>
+							<span class="mr-3">{item.icon}</span>
+							{item.name}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
 
-	<ul>
-		{#each settings as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+		<!-- Management -->
+		<div class="px-4 mb-6">
+			<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Management</h2>
+			<ul class="space-y-1">
+				{#each management as item}
+					<li>
+						<a 
+							href={item.route} 
+							class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors duration-200 {isActive(item.route) ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
+						>
+							<span class="mr-3">{item.icon}</span>
+							{item.name}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
 
-	<ul>
-		{#each tutorial as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+		<!-- Help & Support -->
+		<div class="px-4 mb-6">
+			<h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Help & Support</h2>
+			<ul class="space-y-1">
+				{#each help as item}
+					<li>
+						<a 
+							href={item.route} 
+							class="flex items-center px-3 py-2 text-sm rounded-lg transition-colors duration-200 {isActive(item.route) ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}"
+						>
+							<span class="mr-3">{item.icon}</span>
+							{item.name}
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</nav>
 
-	<ul>
-		{#each mainFeatures as item}
-			<li><a href={item.route}>{item.name}</a></li>
-		{/each}
-	</ul>
+	<!-- Footer -->
+	<div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
+		<div class="text-xs text-gray-400 text-center">
+			<p>© 2024 HR Manager</p>
+			<p>v1.0.0</p>
+		</div>
+	</div>
 </aside>
-
-<style>
-	aside {
-		background-color: #f4f4f4;
-		width: 200px;
-		padding: 1rem;
-	}
-	ul {
-		list-style: none;
-		padding: 0;
-	}
-	li {
-		padding: 0.5rem 0;
-		cursor: pointer;
-		&:hover {
-			background-color: #e4e4e4;
-		}
-		&:last-child {
-			border-bottom-width: 2px;
-		}
-	}
-	a {
-		text-decoration: none;
-		color: inherit;
-		display: block;
-	}
-</style>
