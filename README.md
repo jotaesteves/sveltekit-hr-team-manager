@@ -114,7 +114,7 @@ pnpm run format
 
 ## 📁 Project Structure
 
-```
+```text
 src/
 ├── lib/
 │   ├── components/          # Reusable UI components
@@ -145,7 +145,7 @@ src/
 The application supports multiple languages through ParaglideJS:
 
 - **English** (en)
-- **German** (de) 
+- **German** (de)
 - **Dutch** (nl)
 - **Portuguese** (pt)
 
@@ -154,14 +154,18 @@ Language files are located in the `messages/` directory and compiled automatical
 ## 🎯 Key Components
 
 ### Performance Grid
+
 Interactive 9-box matrix for plotting employee performance vs potential with:
+
 - Drag-and-drop employee positioning
 - Real-time score updates
 - Visual feedback and role indicators
 - Customizable scales and dimensions
 
 ### CRUD Table
+
 Advanced data table component featuring:
+
 - Expandable rows for long content
 - Inline editing capabilities
 - Sorting and filtering
@@ -169,7 +173,9 @@ Advanced data table component featuring:
 - CSV export functionality
 
 ### Navigation
+
 Organized sidebar navigation with sections:
+
 - **Core Features**: Dashboard, Performance Grid, People, Criteria, Reviews
 - **Workflow**: Feedback, One-on-One, Performance Reviews  
 - **Management**: Import/Export, Modules, Settings
@@ -180,6 +186,7 @@ Organized sidebar navigation with sections:
 The application is built with SvelteKit's adapter-auto, which automatically selects the appropriate adapter for your deployment platform.
 
 Popular deployment options:
+
 - **Vercel**: Zero-config deployment
 - **Netlify**: Static site hosting
 - **Node.js**: Self-hosted with adapter-node
@@ -206,4 +213,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-**Built with ❤️ using SvelteKit and modern web technologies**
+> Built with ❤️ using SvelteKit and modern web technologies
