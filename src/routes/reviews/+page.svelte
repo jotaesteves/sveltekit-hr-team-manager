@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 
 	// Sample data for reviews
 	let reviews = [
@@ -29,13 +29,31 @@
 
 	// Define columns for the reviews table
 	const columns = [
-		{ key: 'employeeName', label: 'Employee', type: 'text', required: true, placeholder: 'Enter employee name' },
-		{ key: 'reviewerName', label: 'Reviewer', type: 'text', required: true, placeholder: 'Enter reviewer name' },
-		{ key: 'period', label: 'Review Period', type: 'text', required: true, placeholder: 'e.g., 2024 Q1' },
-		{ 
-			key: 'status', 
-			label: 'Status', 
-			type: 'select', 
+		{
+			key: 'employeeName',
+			label: 'Employee',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter employee name'
+		},
+		{
+			key: 'reviewerName',
+			label: 'Reviewer',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter reviewer name'
+		},
+		{
+			key: 'period',
+			label: 'Review Period',
+			type: 'text',
+			required: true,
+			placeholder: 'e.g., 2024 Q1'
+		},
+		{
+			key: 'status',
+			label: 'Status',
+			type: 'select',
 			required: true,
 			options: [
 				{ value: 'Draft', label: 'Draft' },

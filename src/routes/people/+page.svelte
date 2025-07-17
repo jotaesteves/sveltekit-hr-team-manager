@@ -1,19 +1,19 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 	import { peopleStore } from '../../stores/dataStore.js';
 
 	// Use the people store
 	$: users = $peopleStore;
 
 	// Define columns for the table
-	columns={[
+	const columns = [
 		{ key: 'name', label: 'Name', placeholder: 'Enter employee name' },
 		{ key: 'email', label: 'Email', type: 'email', placeholder: 'Enter email address' },
 		{ key: 'position', label: 'Position', placeholder: 'Enter job position' },
 		{ key: 'department', label: 'Department', placeholder: 'Enter department' },
 		{ key: 'hireDate', label: 'Hire Date', type: 'date' },
 		{ key: 'isActive', label: 'Active', type: 'checkbox' }
-	]}	// CRUD handlers using the store
+	]; // CRUD handlers using the store
 	/**
 	 * @param {any} newUser
 	 */

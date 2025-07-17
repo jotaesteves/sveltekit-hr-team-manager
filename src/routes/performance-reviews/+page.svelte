@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 
 	// Sample data for performance reviews
 	let performanceReviews = [
@@ -41,19 +41,62 @@
 
 	// Define columns for the performance reviews table
 	const columns = [
-		{ key: 'employeeName', label: 'Employee', type: 'text', required: true, placeholder: 'Enter employee name' },
-		{ key: 'reviewPeriod', label: 'Review Period', type: 'text', required: true, placeholder: 'e.g., 2024 Annual' },
-		{ key: 'reviewType', label: 'Review Type', type: 'text', required: true, placeholder: 'e.g., Annual, Quarterly' },
-		{ key: 'selfAssessmentScore', label: 'Self Score', type: 'number', placeholder: 'Score (1-10)' },
+		{
+			key: 'employeeName',
+			label: 'Employee',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter employee name'
+		},
+		{
+			key: 'reviewPeriod',
+			label: 'Review Period',
+			type: 'text',
+			required: true,
+			placeholder: 'e.g., 2024 Annual'
+		},
+		{
+			key: 'reviewType',
+			label: 'Review Type',
+			type: 'text',
+			required: true,
+			placeholder: 'e.g., Annual, Quarterly'
+		},
+		{
+			key: 'selfAssessmentScore',
+			label: 'Self Score',
+			type: 'number',
+			placeholder: 'Score (1-10)'
+		},
 		{ key: 'managerScore', label: 'Manager Score', type: 'number', placeholder: 'Score (1-10)' },
 		{ key: 'peerScore', label: 'Peer Score', type: 'number', placeholder: 'Score (1-10)' },
-		{ key: 'overallRating', label: 'Overall Rating', type: 'text', placeholder: 'e.g., Outstanding, Exceeds' },
+		{
+			key: 'overallRating',
+			label: 'Overall Rating',
+			type: 'text',
+			placeholder: 'e.g., Outstanding, Exceeds'
+		},
 		{ key: 'strengthsAreas', label: 'Strengths', type: 'text', placeholder: 'List key strengths' },
-		{ key: 'improvementAreas', label: 'Improvement Areas', type: 'text', placeholder: 'Areas for development' },
+		{
+			key: 'improvementAreas',
+			label: 'Improvement Areas',
+			type: 'text',
+			placeholder: 'Areas for development'
+		},
 		{ key: 'careerGoals', label: 'Career Goals', type: 'text', placeholder: 'Career aspirations' },
-		{ key: 'developmentPlan', label: 'Development Plan', type: 'text', placeholder: 'Learning and development plan' },
+		{
+			key: 'developmentPlan',
+			label: 'Development Plan',
+			type: 'text',
+			placeholder: 'Learning and development plan'
+		},
 		{ key: 'reviewDate', label: 'Review Date', type: 'date', placeholder: 'Select review date' },
-		{ key: 'nextReviewDate', label: 'Next Review', type: 'date', placeholder: 'Select next review date' },
+		{
+			key: 'nextReviewDate',
+			label: 'Next Review',
+			type: 'date',
+			placeholder: 'Select next review date'
+		},
 		{ key: 'status', label: 'Status', type: 'text', placeholder: 'e.g., Completed, In Progress' }
 	];
 
@@ -73,8 +116,8 @@
 	 * @param {any} updatedReview
 	 */
 	function handleUpdate(updatedReview) {
-		performanceReviews = performanceReviews.map((review) => 
-			(review.id === updatedReview.id ? updatedReview : review)
+		performanceReviews = performanceReviews.map((review) =>
+			review.id === updatedReview.id ? updatedReview : review
 		);
 	}
 

@@ -1,0 +1,156 @@
+<div class="max-w-4xl mx-auto space-y-8"></div>
+	<div class="text-center mb-12">
+		<h1 class="text-4xl font-bold text-gray-800 mb-4">HR Team Manager Tutorial</h1>
+		<p class="text-xl text-gray-600">Learn how to use our comprehensive HR management system</p>
+	</div>
+
+	<!-- Getting Started -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
+			Getting Started
+		</h2>
+		<div class="space-y-4 text-gray-600">
+			<p>Welcome to the HR Team Manager! This system helps you manage all aspects of human resources including employee data, performance reviews, feedback, and one-on-one meetings.</p>
+			<div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+				<p class="font-medium text-blue-800">Navigation</p>
+				<p class="text-blue-700">Use the sidebar on the left to navigate between different modules. The main modules include People, Reviews, Feedback, One-on-One meetings, and more.</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Managing People -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+			Managing People
+		</h2>
+		<div class="space-y-4 text-gray-600">
+			<p>The People module allows you to manage employee information including:</p>
+			<ul class="list-disc pl-6 space-y-2">
+				<li><strong>Personal Information:</strong> Names, email addresses, positions</li>
+				<li><strong>Employment Details:</strong> Department, hire date, active status</li>
+				<li><strong>Search & Filter:</strong> Use the search bar to quickly find employees</li>
+			</ul>
+			<div class="bg-green-50 border-l-4 border-green-500 p-4">
+				<p class="font-medium text-green-800">Pro Tip</p>
+				<p class="text-green-700">Click "Add New Employee" to add team members. Use the checkbox fields to mark employees as active or inactive.</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Performance Reviews -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+			Performance Reviews
+		</h2>
+		<div class="space-y-4 text-gray-600">
+			<p>Manage the complete performance review lifecycle:</p>
+			<ul class="list-disc pl-6 space-y-2">
+				<li><strong>Review Creation:</strong> Set up reviews with employee, reviewer, and period</li>
+				<li><strong>Status Tracking:</strong> Monitor review progress from Draft to Completed</li>
+				<li><strong>Scoring:</strong> Record overall performance scores and detailed feedback</li>
+				<li><strong>Goal Setting:</strong> Document goals and action items for future development</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Feedback System -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
+			Feedback System
+		</h2>
+		<div class="space-y-4 text-gray-600">
+			<p>Facilitate continuous feedback culture:</p>
+			<ul class="list-disc pl-6 space-y-2">
+				<li><strong>Multiple Types:</strong> Peer, Manager, Upward, and Self-Assessment feedback</li>
+				<li><strong>Anonymous Options:</strong> Enable anonymous feedback for honest communication</li>
+				<li><strong>Rating System:</strong> Use 1-10 scoring for quantitative assessment</li>
+				<li><strong>Status Management:</strong> Track feedback from submission to review</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- One-on-One Meetings -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</span>
+			One-on-One Meetings
+		</h2>
+		<div class="space-y-4 text-gray-600">
+			<p>Schedule and track regular one-on-one meetings:</p>
+			<ul class="list-disc pl-6 space-y-2">
+				<li><strong>Scheduling:</strong> Set meeting dates and duration</li>
+				<li><strong>Agenda Planning:</strong> Document discussion topics in advance</li>
+				<li><strong>Meeting Notes:</strong> Record key discussion points</li>
+				<li><strong>Action Items:</strong> Track follow-up tasks and commitments</li>
+				<li><strong>Next Meeting:</strong> Schedule recurring meetings efficiently</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Advanced Features -->
+	<div class="bg-white rounded-lg shadow-md p-6">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+			<span class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">6</span>
+			Advanced Features
+		</h2>
+		<div class="space-y-6 text-gray-600">
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Performance Grid</h3>
+				<p>Visualize team performance with the interactive performance grid. Compare employee ratings across different criteria with color-coded heatmaps.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Evaluation Criteria</h3>
+				<p>Define custom evaluation criteria with weighted scoring. Set up criteria that align with your organization's values and goals.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Import/Export</h3>
+				<p>Bulk import employee data and export reports for analysis. Track all import/export operations with detailed logs.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Settings Management</h3>
+				<p>Configure system-wide settings including company information, review cycles, and security preferences.</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Best Practices -->
+	<div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-200">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4">💡 Best Practices</h2>
+		<div class="grid md:grid-cols-2 gap-6 text-gray-600">
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Regular Updates</h3>
+				<p>Keep employee information current and schedule regular review cycles.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Consistent Feedback</h3>
+				<p>Encourage ongoing feedback rather than waiting for formal review periods.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Goal Tracking</h3>
+				<p>Set SMART goals and regularly review progress during one-on-ones.</p>
+			</div>
+			<div>
+				<h3 class="font-semibold text-gray-800 mb-2">Data Security</h3>
+				<p>Regularly review access permissions and maintain confidentiality.</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Support -->
+	<div class="bg-white rounded-lg shadow-md p-6 text-center">
+		<h2 class="text-2xl font-semibold text-gray-800 mb-4">Need Help?</h2>
+		<p class="text-gray-600 mb-4">Our HR Team Manager is designed to be intuitive, but we're here to help if you need assistance.</p>
+		<div class="flex justify-center space-x-4">
+			<button class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">
+				Contact Support
+			</button>
+			<button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium">
+				View Documentation
+			</button>
+		</div>
+	</div>
+</div>

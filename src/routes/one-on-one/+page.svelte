@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 
 	// Sample data for one-on-one meetings
 	let oneOnOnes = [
@@ -31,13 +31,36 @@
 
 	// Define columns for the one-on-one table
 	const columns = [
-		{ key: 'employee', label: 'Employee', type: 'text', required: true, placeholder: 'Enter employee name' },
-		{ key: 'manager', label: 'Manager', type: 'text', required: true, placeholder: 'Enter manager name' },
-		{ key: 'scheduledDate', label: 'Scheduled Date', type: 'date', required: true, placeholder: 'Select date' },
-		{ key: 'duration', label: 'Duration (min)', type: 'number', placeholder: 'Meeting duration in minutes' },
-		{ 
-			key: 'status', 
-			label: 'Status', 
+		{
+			key: 'employee',
+			label: 'Employee',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter employee name'
+		},
+		{
+			key: 'manager',
+			label: 'Manager',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter manager name'
+		},
+		{
+			key: 'scheduledDate',
+			label: 'Scheduled Date',
+			type: 'date',
+			required: true,
+			placeholder: 'Select date'
+		},
+		{
+			key: 'duration',
+			label: 'Duration (min)',
+			type: 'number',
+			placeholder: 'Meeting duration in minutes'
+		},
+		{
+			key: 'status',
+			label: 'Status',
 			type: 'select',
 			required: true,
 			options: [
@@ -50,8 +73,18 @@
 		},
 		{ key: 'agenda', label: 'Agenda', type: 'textarea', placeholder: 'Enter meeting agenda' },
 		{ key: 'notes', label: 'Notes', type: 'textarea', placeholder: 'Enter meeting notes' },
-		{ key: 'actionItems', label: 'Action Items', type: 'textarea', placeholder: 'Enter action items' },
-		{ key: 'nextMeetingDate', label: 'Next Meeting', type: 'date', placeholder: 'Select next meeting date' }
+		{
+			key: 'actionItems',
+			label: 'Action Items',
+			type: 'textarea',
+			placeholder: 'Enter action items'
+		},
+		{
+			key: 'nextMeetingDate',
+			label: 'Next Meeting',
+			type: 'date',
+			placeholder: 'Select next meeting date'
+		}
 	];
 
 	// CRUD handlers
@@ -64,7 +97,9 @@
 	}
 
 	function handleUpdate(updatedOneOnOne) {
-		oneOnOnes = oneOnOnes.map((meeting) => (meeting.id === updatedOneOnOne.id ? updatedOneOnOne : meeting));
+		oneOnOnes = oneOnOnes.map((meeting) =>
+			meeting.id === updatedOneOnOne.id ? updatedOneOnOne : meeting
+		);
 	}
 
 	function handleDelete(id) {

@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 
 	// Sample data for import/export operations
 	let importExportOperations = [
@@ -33,9 +33,9 @@
 
 	// Define columns for the import/export table
 	const columns = [
-		{ 
-			key: 'operationType', 
-			label: 'Operation', 
+		{
+			key: 'operationType',
+			label: 'Operation',
 			type: 'select',
 			required: true,
 			options: [
@@ -43,9 +43,9 @@
 				{ value: 'Export', label: 'Export' }
 			]
 		},
-		{ 
-			key: 'dataType', 
-			label: 'Data Type', 
+		{
+			key: 'dataType',
+			label: 'Data Type',
 			type: 'select',
 			required: true,
 			options: [
@@ -56,13 +56,29 @@
 				{ value: 'Evaluation Criteria', label: 'Evaluation Criteria' }
 			]
 		},
-		{ key: 'fileName', label: 'File Name', type: 'text', required: true, placeholder: 'Enter file name' },
-		{ key: 'recordsProcessed', label: 'Records Processed', type: 'number', placeholder: 'Number of records' },
-		{ key: 'recordsSuccess', label: 'Success Count', type: 'number', placeholder: 'Successful records' },
+		{
+			key: 'fileName',
+			label: 'File Name',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter file name'
+		},
+		{
+			key: 'recordsProcessed',
+			label: 'Records Processed',
+			type: 'number',
+			placeholder: 'Number of records'
+		},
+		{
+			key: 'recordsSuccess',
+			label: 'Success Count',
+			type: 'number',
+			placeholder: 'Successful records'
+		},
 		{ key: 'recordsFailed', label: 'Failed Count', type: 'number', placeholder: 'Failed records' },
-		{ 
-			key: 'status', 
-			label: 'Status', 
+		{
+			key: 'status',
+			label: 'Status',
 			type: 'select',
 			required: true,
 			options: [
@@ -73,7 +89,13 @@
 				{ value: 'Cancelled', label: 'Cancelled' }
 			]
 		},
-		{ key: 'executedBy', label: 'Executed By', type: 'text', required: true, placeholder: 'User name' },
+		{
+			key: 'executedBy',
+			label: 'Executed By',
+			type: 'text',
+			required: true,
+			placeholder: 'User name'
+		},
 		{ key: 'executedDate', label: 'Executed Date', type: 'date', placeholder: 'Select date' },
 		{ key: 'notes', label: 'Notes', type: 'textarea', placeholder: 'Additional notes' }
 	];
@@ -95,8 +117,8 @@
 	 * @param {any} updatedOperation
 	 */
 	function handleUpdate(updatedOperation) {
-		importExportOperations = importExportOperations.map((operation) => 
-			(operation.id === updatedOperation.id ? updatedOperation : operation)
+		importExportOperations = importExportOperations.map((operation) =>
+			operation.id === updatedOperation.id ? updatedOperation : operation
 		);
 	}
 
@@ -129,25 +151,25 @@
 
 <div class="space-y-6">
 	<!-- Import/Export Actions -->
-	<div class="bg-white p-6 rounded-lg shadow-md">
-		<h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			<div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-				<h3 class="text-lg font-medium mb-2">Import Data</h3>
-				<p class="text-gray-600 mb-4">Upload CSV or Excel files to import data</p>
-				<input 
-					type="file" 
-					accept=".csv,.xlsx,.xls" 
+	<div class="rounded-lg bg-white p-6 shadow-md">
+		<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+			<div class="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center">
+				<h3 class="mb-2 text-lg font-medium">Import Data</h3>
+				<p class="mb-4 text-gray-600">Upload CSV or Excel files to import data</p>
+				<input
+					type="file"
+					accept=".csv,.xlsx,.xls"
 					on:change={handleFileUpload}
-					class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+					class="block w-full text-sm text-gray-500 file:mr-4 file:rounded-full file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
 				/>
 			</div>
-			<div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-				<h3 class="text-lg font-medium mb-2">Export Data</h3>
-				<p class="text-gray-600 mb-4">Download current data as CSV or Excel</p>
-				<button 
+			<div class="rounded-lg border-2 border-dashed border-gray-300 p-6 text-center">
+				<h3 class="mb-2 text-lg font-medium">Export Data</h3>
+				<p class="mb-4 text-gray-600">Download current data as CSV or Excel</p>
+				<button
 					on:click={exportData}
-					class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+					class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
 				>
 					Export Data
 				</button>

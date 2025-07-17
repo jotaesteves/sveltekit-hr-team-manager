@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 
 	// Sample data for settings
 	let systemSettings = [
@@ -40,11 +40,51 @@
 
 	// Define columns for the settings table
 	const columns = [
-		{ key: 'category', label: 'Category', type: 'text', required: true, placeholder: 'e.g., General, Security' },
-		{ key: 'settingName', label: 'Setting Name', type: 'text', required: true, placeholder: 'Enter setting name' },
-		{ key: 'settingValue', label: 'Value', type: 'text', required: true, placeholder: 'Enter setting value' },
-		{ key: 'description', label: 'Description', type: 'text', placeholder: 'Describe the setting' },
-		{ key: 'dataType', label: 'Data Type', type: 'text', placeholder: 'e.g., text, number, boolean' },
+		{
+			key: 'category',
+			label: 'Category',
+			type: 'select',
+			required: true,
+			options: [
+				{ value: 'General', label: 'General' },
+				{ value: 'Reviews', label: 'Reviews' },
+				{ value: 'Security', label: 'Security' },
+				{ value: 'Notifications', label: 'Notifications' },
+				{ value: 'Integration', label: 'Integration' }
+			]
+		},
+		{
+			key: 'settingName',
+			label: 'Setting Name',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter setting name'
+		},
+		{
+			key: 'settingValue',
+			label: 'Value',
+			type: 'text',
+			required: true,
+			placeholder: 'Enter setting value'
+		},
+		{
+			key: 'description',
+			label: 'Description',
+			type: 'textarea',
+			placeholder: 'Describe the setting'
+		},
+		{
+			key: 'dataType',
+			label: 'Data Type',
+			type: 'select',
+			options: [
+				{ value: 'text', label: 'Text' },
+				{ value: 'number', label: 'Number' },
+				{ value: 'boolean', label: 'Boolean' },
+				{ value: 'select', label: 'Select' },
+				{ value: 'date', label: 'Date' }
+			]
+		},
 		{ key: 'isEditable', label: 'Editable', type: 'checkbox' },
 		{ key: 'lastModified', label: 'Last Modified', type: 'date', placeholder: 'Select date' },
 		{ key: 'modifiedBy', label: 'Modified By', type: 'text', placeholder: 'User name' }
@@ -73,9 +113,7 @@
 			lastModified: new Date().toISOString().split('T')[0],
 			modifiedBy: 'Current User'
 		};
-		systemSettings = systemSettings.map((s) => 
-			(s.id === setting.id ? setting : s)
-		);
+		systemSettings = systemSettings.map((s) => (s.id === setting.id ? setting : s));
 	}
 
 	/**
@@ -90,31 +128,31 @@
 		{
 			name: 'General',
 			description: 'Basic company and application settings',
-			settings: systemSettings.filter(s => s.category === 'General')
+			settings: systemSettings.filter((s) => s.category === 'General')
 		},
 		{
 			name: 'Reviews',
 			description: 'Performance review and evaluation settings',
-			settings: systemSettings.filter(s => s.category === 'Reviews')
+			settings: systemSettings.filter((s) => s.category === 'Reviews')
 		},
 		{
 			name: 'Security',
 			description: 'Security and access control settings',
-			settings: systemSettings.filter(s => s.category === 'Security')
+			settings: systemSettings.filter((s) => s.category === 'Security')
 		}
 	];
 </script>
 
 <div class="space-y-6">
 	<!-- Settings Overview -->
-	<div class="bg-white p-6 rounded-lg shadow-md">
-		<h2 class="text-xl font-semibold mb-4">Settings Overview</h2>
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+	<div class="rounded-lg bg-white p-6 shadow-md">
+		<h2 class="mb-4 text-xl font-semibold">Settings Overview</h2>
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 			{#each settingsCategories as category}
-				<div class="border rounded-lg p-4">
-					<h3 class="font-medium text-lg">{category.name}</h3>
-					<p class="text-gray-600 text-sm mb-2">{category.description}</p>
-					<span class="text-blue-600 font-semibold">{category.settings.length} settings</span>
+				<div class="rounded-lg border p-4">
+					<h3 class="text-lg font-medium">{category.name}</h3>
+					<p class="mb-2 text-sm text-gray-600">{category.description}</p>
+					<span class="font-semibold text-blue-600">{category.settings.length} settings</span>
 				</div>
 			{/each}
 		</div>

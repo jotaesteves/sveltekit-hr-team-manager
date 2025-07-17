@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { peopleStore, criteriaStore, performanceGridStore } from '../../stores/dataStore.js';
+	import Grid from '$lib/components/Grid/Grid.svelte';
 
 	// Grid component - The main star of the HR application
 	$: employees = $peopleStore;
@@ -8,9 +9,72 @@
 	$: evaluationGrid = $performanceGridStore;
 
 	// Current view mode
-	let viewMode = 'scores'; // 'scores', 'heatmap', 'detailed'
+	let viewMode = 'scores'; // 'scores', 'heatmap', 'detailed', 'matrix'
 	let selectedPeriod = '2024 Q1';
 	let showWeights = true;
+
+	// Grid matrix view properties
+	let showNames = true;
+	let isDraggable = false;
+	let isEditable = true;
+
+	// Sample data for the matrix view
+	const reviewSettings = {
+		scales: {
+			4: {
+				1: {
+					1: { name: 'Poor' },
+					2: { name: 'Below Average' },
+					3: { name: 'Good' },
+					4: { name: 'Excellent' }
+				},
+				2: {
+					1: { name: 'Low' },
+					2: { name: 'Medium' },
+					3: { name: 'High' },
+					4: { name: 'Very High' }
+				}
+			}
+		},
+		dimensions: {
+			1: { name: 'Performance' },
+			2: { name: 'Potential' },
+			3: { name: 'Employability' }
+		},
+		roles: [
+			{ name: 'Under Performer' },
+			{ name: 'Core Performer' },
+			{ name: 'Solid Performer' },
+			{ name: 'High Performer' },
+			{ name: 'Top Performer' }
+		]
+	};
+
+	const review = {
+		createdAt: new Date().toISOString(),
+		reviewerName: 'HR Manager',
+		name: 'Performance Review',
+		reviewName: 'Q1 2024 Review',
+		type: 'Quarterly'
+	};
+
+	// Convert employees to memberships format for the matrix view
+	$: memberships = employees.map((emp, index) => ({
+		id: emp.id,
+		membershipId: emp.id,
+		firstName: emp.name.split(' ')[0],
+		name: emp.name,
+		score: {
+			values: {
+				1: Math.floor(Math.random() * 4) + 1, // Performance (1-4)
+				2: Math.floor(Math.random() * 4) + 1, // Potential (1-4)
+				3: Math.floor(Math.random() * 4) + 1 // Employability (1-4)
+			}
+		}
+	}));
+
+	const scale = {};
+	const scaleColors = {};
 
 	// Initialize the grid when component mounts
 	onMount(() => {
@@ -44,15 +108,15 @@
 	function calculateWeightedScore(employeeId) {
 		let totalScore = 0;
 		let totalWeight = 0;
-		
-		criteria.forEach(crit => {
+
+		criteria.forEach((crit) => {
 			const evaluation = evaluationGrid[employeeId]?.[crit.id];
 			if (evaluation?.score) {
 				totalScore += evaluation.score * (crit.weight / 100);
 				totalWeight += crit.weight / 100;
 			}
 		});
-		
+
 		return totalWeight > 0 ? (totalScore / totalWeight).toFixed(1) : 0;
 	}
 
@@ -80,7 +144,7 @@
 
 	// Export functionality
 	function exportGrid() {
-		const data = employees.map(emp => {
+		const data = employees.map((emp) => {
 			/** @type {Record<string, any>} */
 			const row = {
 				Employee: emp.name,
@@ -88,16 +152,16 @@
 				Department: emp.department,
 				'Weighted Score': calculateWeightedScore(emp.id)
 			};
-			
-			criteria.forEach(crit => {
+
+			criteria.forEach((crit) => {
 				const evaluation = evaluationGrid[emp.id]?.[crit.id];
 				row[crit.name] = evaluation?.score || 0;
 				row[`${crit.name} Notes`] = evaluation?.notes || '';
 			});
-			
+
 			return row;
 		});
-		
+
 		console.log('Export data:', data);
 		alert('Grid data exported (check console for data)');
 	}
@@ -117,165 +181,218 @@
 
 <div class="space-y-6">
 	<!-- Grid Header -->
-	<div class="bg-white p-6 rounded-lg shadow-md">
-		<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+	<div class="rounded-lg bg-white p-6 shadow-md">
+		<div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
 			<div>
 				<h1 class="text-2xl font-bold text-gray-800">Performance Evaluation Grid</h1>
 				<p class="text-gray-600">Comprehensive performance matrix for {selectedPeriod}</p>
 			</div>
-			
+
 			<div class="flex flex-wrap gap-2">
 				<!-- View Mode Selector -->
-				<select bind:value={viewMode} class="px-3 py-2 border rounded-md">
+				<select bind:value={viewMode} class="rounded-md border px-3 py-2">
 					<option value="scores">Score View</option>
 					<option value="heatmap">Heatmap View</option>
 					<option value="detailed">Detailed View</option>
+					<option value="matrix">Performance Matrix</option>
 				</select>
-				
+
 				<!-- Period Selector -->
-				<select bind:value={selectedPeriod} class="px-3 py-2 border rounded-md">
+				<select bind:value={selectedPeriod} class="rounded-md border px-3 py-2">
 					<option value="2024 Q1">2024 Q1</option>
 					<option value="2023 Q4">2023 Q4</option>
 					<option value="2023 Q3">2023 Q3</option>
 				</select>
-				
+
 				<!-- Export/Import -->
-				<button on:click={exportGrid} class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+				<button
+					on:click={exportGrid}
+					class="rounded bg-green-500 px-4 py-2 text-white hover:bg-green-600"
+				>
 					Export
 				</button>
-				<label class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 cursor-pointer">
+				<label class="cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 					Import
 					<input type="file" accept=".csv,.xlsx" on:change={handleImport} class="hidden" />
 				</label>
 			</div>
 		</div>
-		
+
 		<!-- Options -->
 		<div class="mt-4 flex gap-4">
 			<label class="flex items-center">
 				<input type="checkbox" bind:checked={showWeights} class="mr-2" />
 				Show Criteria Weights
 			</label>
+			{#if viewMode === 'matrix'}
+				<label class="flex items-center">
+					<input type="checkbox" bind:checked={showNames} class="mr-2" />
+					Show Names
+				</label>
+				<label class="flex items-center">
+					<input type="checkbox" bind:checked={isDraggable} class="mr-2" />
+					Enable Drag & Drop
+				</label>
+			{/if}
 		</div>
 	</div>
 
 	<!-- Grid Statistics -->
-	<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-		<div class="bg-blue-50 p-4 rounded-lg">
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+		<div class="rounded-lg bg-blue-50 p-4">
 			<h3 class="text-lg font-medium text-blue-800">Total Employees</h3>
 			<p class="text-2xl font-bold text-blue-600">{employees.length}</p>
 		</div>
-		<div class="bg-green-50 p-4 rounded-lg">
+		<div class="rounded-lg bg-green-50 p-4">
 			<h3 class="text-lg font-medium text-green-800">Evaluation Criteria</h3>
 			<p class="text-2xl font-bold text-green-600">{criteria.length}</p>
 		</div>
-		<div class="bg-purple-50 p-4 rounded-lg">
+		<div class="rounded-lg bg-purple-50 p-4">
 			<h3 class="text-lg font-medium text-purple-800">Evaluations</h3>
 			<p class="text-2xl font-bold text-purple-600">{employees.length * criteria.length}</p>
 		</div>
-		<div class="bg-orange-50 p-4 rounded-lg">
+		<div class="rounded-lg bg-orange-50 p-4">
 			<h3 class="text-lg font-medium text-orange-800">Completion Rate</h3>
 			<p class="text-2xl font-bold text-orange-600">100%</p>
 		</div>
 	</div>
 
 	<!-- Main Evaluation Grid -->
-	<div class="bg-white rounded-lg shadow-md overflow-hidden">
-		<div class="overflow-x-auto">
-			<table class="w-full">
-				<thead class="bg-gray-50">
-					<tr>
-						<th class="px-4 py-3 text-left font-medium text-gray-900 sticky left-0 bg-gray-50 z-10">Employee</th>
-						{#each criteria as criterion}
-							<th class="px-4 py-3 text-center font-medium text-gray-900 min-w-32">
-								<div>{criterion.name}</div>
-								{#if showWeights}
-									<div class="text-xs text-gray-500">({criterion.weight}%)</div>
-								{/if}
-							</th>
-						{/each}
-						<th class="px-4 py-3 text-center font-medium text-gray-900">Weighted Score</th>
-					</tr>
-				</thead>
-				<tbody class="divide-y divide-gray-200">
-					{#each employees as employee}
-						<tr class="hover:bg-gray-50">
-							<td class="px-4 py-3 sticky left-0 bg-white z-10 border-r">
-								<div class="font-medium text-gray-900">{employee.name}</div>
-								<div class="text-sm text-gray-500">{employee.role} • {employee.department}</div>
-							</td>
+	{#if viewMode === 'matrix'}
+		<!-- Performance Matrix View -->
+		<div class="overflow-hidden rounded-lg bg-white shadow-md">
+			<div class="p-6">
+				<h2 class="mb-4 text-xl font-semibold">Performance vs Potential Matrix</h2>
+				<div class="overflow-x-auto">
+					<Grid
+						{reviewSettings}
+						{review}
+						reviewScale={4}
+						{memberships}
+						{isDraggable}
+						{isEditable}
+						{scale}
+						{scaleColors}
+						{showNames}
+						hideTitle={false}
+						reviewRoles={{}}
+						on:drop-member={(e) => console.log('Member dropped:', e.detail)}
+						on:selected-member={(e) => console.log('Member selected:', e.detail)}
+						on:open-membership-evaluation-dialog={(e) => console.log('Open evaluation:', e.detail)}
+					/>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<!-- Traditional Grid View -->
+		<div class="overflow-hidden rounded-lg bg-white shadow-md">
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead class="bg-gray-50">
+						<tr>
+							<th
+								class="sticky left-0 z-10 bg-gray-50 px-4 py-3 text-left font-medium text-gray-900"
+								>Employee</th
+							>
 							{#each criteria as criterion}
-								{@const evaluation = evaluationGrid[employee.id]?.[criterion.id]}
-								<td class="px-4 py-3 text-center">
-									{#if viewMode === 'scores'}
-										<input 
-											type="number" 
-											min="1" 
-											max="5" 
-											value={evaluation?.score || 0}
-											on:change={(e) => {
-												const target = /** @type {HTMLInputElement} */ (e.target);
-												updateScore(employee.id, criterion.id, parseInt(target.value));
-											}}
-											class="w-16 text-center border rounded px-2 py-1"
-										/>
-									{:else if viewMode === 'heatmap'}
-										<div class="flex flex-col items-center">
-											<div class="w-8 h-8 rounded {getScoreColor(evaluation?.score || 0)} flex items-center justify-center text-white text-sm font-bold">
-												{evaluation?.score || 0}
-											</div>
-											<div class="text-xs mt-1">{getScoreLabel(evaluation?.score || 0)}</div>
-										</div>
-									{:else if viewMode === 'detailed'}
-										<div class="text-center">
-											<div class="font-bold text-lg">{evaluation?.score || 0}</div>
-											<input 
-												type="text" 
-												placeholder="Notes..."
-												value={evaluation?.notes || ''}
+								<th class="min-w-32 px-4 py-3 text-center font-medium text-gray-900">
+									<div>{criterion.name}</div>
+									{#if showWeights}
+										<div class="text-xs text-gray-500">({criterion.weight}%)</div>
+									{/if}
+								</th>
+							{/each}
+							<th class="px-4 py-3 text-center font-medium text-gray-900">Weighted Score</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-200">
+						{#each employees as employee}
+							<tr class="hover:bg-gray-50">
+								<td class="sticky left-0 z-10 border-r bg-white px-4 py-3">
+									<div class="font-medium text-gray-900">{employee.name}</div>
+									<div class="text-sm text-gray-500">{employee.role} • {employee.department}</div>
+								</td>
+								{#each criteria as criterion}
+									{@const evaluation = evaluationGrid[employee.id]?.[criterion.id]}
+									<td class="px-4 py-3 text-center">
+										{#if viewMode === 'scores'}
+											<input
+												type="number"
+												min="1"
+												max="5"
+												value={evaluation?.score || 0}
 												on:change={(e) => {
 													const target = /** @type {HTMLInputElement} */ (e.target);
-													updateNotes(employee.id, criterion.id, target.value);
+													updateScore(employee.id, criterion.id, parseInt(target.value));
 												}}
-												class="w-24 text-xs border rounded px-1 py-1 mt-1"
+												class="w-16 rounded border px-2 py-1 text-center"
 											/>
-										</div>
-									{/if}
+										{:else if viewMode === 'heatmap'}
+											<div class="flex flex-col items-center">
+												<div
+													class="h-8 w-8 rounded {getScoreColor(
+														evaluation?.score || 0
+													)} flex items-center justify-center text-sm font-bold text-white"
+												>
+													{evaluation?.score || 0}
+												</div>
+												<div class="mt-1 text-xs">{getScoreLabel(evaluation?.score || 0)}</div>
+											</div>
+										{:else if viewMode === 'detailed'}
+											<div class="text-center">
+												<div class="text-lg font-bold">{evaluation?.score || 0}</div>
+												<input
+													type="text"
+													placeholder="Notes..."
+													value={evaluation?.notes || ''}
+													on:change={(e) => {
+														const target = /** @type {HTMLInputElement} */ (e.target);
+														updateNotes(employee.id, criterion.id, target.value);
+													}}
+													class="mt-1 w-24 rounded border px-1 py-1 text-xs"
+												/>
+											</div>
+										{/if}
+									</td>
+								{/each}
+								<td class="px-4 py-3 text-center">
+									<div class="text-lg font-bold text-blue-600">
+										{calculateWeightedScore(employee.id)}
+									</div>
+									<div class="text-xs text-gray-500">
+										{getScoreLabel(calculateWeightedScore(employee.id))}
+									</div>
 								</td>
-							{/each}
-							<td class="px-4 py-3 text-center">
-								<div class="font-bold text-lg text-blue-600">{calculateWeightedScore(employee.id)}</div>
-								<div class="text-xs text-gray-500">{getScoreLabel(calculateWeightedScore(employee.id))}</div>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
+	{/if}
 
 	<!-- Grid Legend -->
-	<div class="bg-white p-6 rounded-lg shadow-md">
-		<h3 class="text-lg font-semibold mb-4">Scoring Legend</h3>
-		<div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+	<div class="rounded-lg bg-white p-6 shadow-md">
+		<h3 class="mb-4 text-lg font-semibold">Scoring Legend</h3>
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-5">
 			<div class="flex items-center">
-				<div class="w-4 h-4 bg-green-500 rounded mr-2"></div>
+				<div class="mr-2 h-4 w-4 rounded bg-green-500"></div>
 				<span class="text-sm">5 - Excellent</span>
 			</div>
 			<div class="flex items-center">
-				<div class="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+				<div class="mr-2 h-4 w-4 rounded bg-blue-500"></div>
 				<span class="text-sm">4 - Good</span>
 			</div>
 			<div class="flex items-center">
-				<div class="w-4 h-4 bg-yellow-500 rounded mr-2"></div>
+				<div class="mr-2 h-4 w-4 rounded bg-yellow-500"></div>
 				<span class="text-sm">3 - Average</span>
 			</div>
 			<div class="flex items-center">
-				<div class="w-4 h-4 bg-orange-500 rounded mr-2"></div>
+				<div class="mr-2 h-4 w-4 rounded bg-orange-500"></div>
 				<span class="text-sm">2 - Below Average</span>
 			</div>
 			<div class="flex items-center">
-				<div class="w-4 h-4 bg-red-500 rounded mr-2"></div>
+				<div class="mr-2 h-4 w-4 rounded bg-red-500"></div>
 				<span class="text-sm">1 - Poor</span>
 			</div>
 		</div>
