@@ -1,5 +1,5 @@
 <script>
-	import CrudTable from '$components/CrudTable.svelte';
+	import CrudTable from '$lib/components/CrudTable.svelte';
 	import { criteriaStore } from '../../stores/dataStore.js';
 
 	// Use the criteria store

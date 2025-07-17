@@ -69,6 +69,8 @@
 			member.score?.values?.[1] === performanceIndex && member.score?.values?.[2] === potentialIndex
 	);
 
+	let isDragOver = false;
+
 	function employabilityToolTip(d3) {
 		if (d3 === 0) {
 			return `${reviewSettings.dimensions?.[3]?.name || 'Dimension'} is not assessed`;
@@ -81,6 +83,7 @@
 
 	function handleDrop(event) {
 		event.preventDefault();
+		isDragOver = false;
 		dispatch('drop', {
 			event,
 			d1: performanceIndex,
@@ -90,12 +93,21 @@
 
 	function handleDragEnter(event) {
 		event.preventDefault();
+		isDragOver = true;
 		dispatch('dragenter', event);
 	}
 
 	function handleDragOver(event) {
 		event.preventDefault();
 		dispatch('dragover', event);
+	}
+
+	function handleDragLeave(event) {
+		event.preventDefault();
+		// Only set isDragOver to false if we're actually leaving the cell
+		if (!event.currentTarget.contains(event.relatedTarget)) {
+			isDragOver = false;
+		}
 	}
 
 	function handleMemberClick(member) {
@@ -131,9 +143,11 @@
 <td
 	class="grid-cell text-role-{gridRole.id}-light"
 	class:donut-cell={!showNames && dropZoneTarget.length}
+	class:drag-over={isDragOver}
 	on:drop={handleDrop}
 	on:dragenter={handleDragEnter}
 	on:dragover={handleDragOver}
+	on:dragleave={handleDragLeave}
 	role="gridcell"
 	tabindex="0"
 >
@@ -183,6 +197,13 @@
 		position: relative;
 		min-height: 60px;
 		min-width: 60px;
+		transition: all 0.2s ease;
+	}
+
+	.grid-cell.drag-over {
+		transform: scale(1.05);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+		z-index: 10;
 	}
 
 	.grid-cell.donut-cell {
@@ -274,10 +295,18 @@
 
 	.rating-chip.draggable {
 		cursor: grab;
+		transition: all 0.2s ease;
+	}
+
+	.rating-chip.draggable:hover {
+		transform: scale(1.1);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 	}
 
 	.rating-chip.draggable:active {
 		cursor: grabbing;
+		transform: scale(1.05);
+		opacity: 0.8;
 	}
 
 	.rating-chip.focused {

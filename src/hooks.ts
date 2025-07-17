@@ -1,4 +1,4 @@
-import { i18n } from '$lib/i18n';
+// import { i18n } from '$lib/i18n';
 import { parseCookie } from '$lib/parseCookie';
 
 export const getSession = async (ev: {
@@ -16,4 +16,5 @@ export const getSession = async (ev: {
 	});
 };
 
-export const reroute = i18n.reroute();
+// Temporary disable i18n to fix error
+// export const reroute = i18n.reroute();

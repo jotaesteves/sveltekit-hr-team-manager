@@ -41,14 +41,40 @@
 	function startDrag(event, member) {
 		event.dataTransfer.dropEffect = 'move';
 		event.dataTransfer.effectAllowed = 'move';
+
+		// Store both the full member object and just the ID as backup
 		event.dataTransfer.setData('membership', JSON.stringify(member));
-		event.dataTransfer.setData('membershipId', member.membershipId);
+		event.dataTransfer.setData('membershipId', member.membershipId || member.id);
+
+		console.log('Starting drag for member:', member.firstName || member.name);
 	}
 
 	function onDrop(event, d1, d2) {
 		event.preventDefault();
 		try {
-			const membership = JSON.parse(event.dataTransfer.getData('membership'));
+			const membershipData = event.dataTransfer.getData('membership');
+			const membershipId = event.dataTransfer.getData('membershipId');
+
+			if (!membershipData && !membershipId) {
+				console.error('No membership data found in drag event');
+				return;
+			}
+
+			let membership;
+			if (membershipData) {
+				membership = JSON.parse(membershipData);
+			} else {
+				// Fallback: find membership by ID
+				membership = memberships.find(
+					(m) => m.id.toString() === membershipId || m.membershipId.toString() === membershipId
+				);
+			}
+
+			if (!membership) {
+				console.error('Could not find membership for ID:', membershipId);
+				return;
+			}
+
 			dispatch('drop-member', { membership, d1, d2 });
 		} catch (e) {
 			console.error('Error parsing dropped data:', e);

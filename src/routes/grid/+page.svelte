@@ -1,12 +1,19 @@
 <script>
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 	import { peopleStore, criteriaStore, performanceGridStore } from '../../stores/dataStore.js';
 	import Grid from '$lib/components/Grid/Grid.svelte';
 
 	// Grid component - The main star of the HR application
-	$: employees = $peopleStore;
-	$: criteria = $criteriaStore;
-	$: evaluationGrid = $performanceGridStore;
+	$: employees = browser ? $peopleStore : [];
+	$: criteria = browser ? $criteriaStore : [];
+	/**
+	 * @type {Record<number, Record<number, { score: number, notes?: string }>>}
+	 */
+	$: evaluationGrid =
+		/** @type {Record<number, Record<number, { score: number, notes?: string }>>} */ (
+			browser ? $performanceGridStore : {}
+		);
 
 	// Current view mode
 	let viewMode = 'scores'; // 'scores', 'heatmap', 'detailed', 'matrix'
@@ -15,7 +22,7 @@
 
 	// Grid matrix view properties
 	let showNames = true;
-	let isDraggable = false;
+	let isDraggable = true; // Enable drag and drop by default
 	let isEditable = true;
 
 	// Sample data for the matrix view
@@ -59,11 +66,11 @@
 	};
 
 	// Convert employees to memberships format for the matrix view
-	$: memberships = employees.map((emp, index) => ({
+	$: membershipData = (employees || []).map((emp, index) => ({
 		id: emp.id,
 		membershipId: emp.id,
-		firstName: emp.name.split(' ')[0],
-		name: emp.name,
+		firstName: (emp.name || '').split(' ')[0],
+		name: emp.name || 'Unknown',
 		score: {
 			values: {
 				1: Math.floor(Math.random() * 4) + 1, // Performance (1-4)
@@ -72,6 +79,8 @@
 			}
 		}
 	}));
+
+	$: memberships = membershipData;
 
 	const scale = {};
 	const scaleColors = {};
@@ -103,13 +112,60 @@
 	}
 
 	/**
+	 * Handle drag and drop of members to update their performance and potential scores
+	 * @param {CustomEvent} event
+	 */
+	function handleMemberDrop(event) {
+		const { membership, d1, d2 } = event.detail;
+
+		if (!membership || !membership.id) {
+			console.error('Invalid membership data in drop event');
+			return;
+		}
+
+		// Find the member in our data
+		const memberIndex = membershipData.findIndex((m) => m.id === membership.id);
+		if (memberIndex === -1) {
+			console.error('Member not found:', membership.id);
+			return;
+		}
+
+		// Update the member's scores based on the new grid position
+		// d1 = performance index, d2 = potential index
+		const updatedMember = {
+			...membershipData[memberIndex],
+			score: {
+				...membershipData[memberIndex].score,
+				values: {
+					...membershipData[memberIndex].score.values,
+					1: d1, // Performance score
+					2: d2 // Potential score
+				}
+			}
+		};
+
+		// Update the membershipData array
+		membershipData = [
+			...membershipData.slice(0, memberIndex),
+			updatedMember,
+			...membershipData.slice(memberIndex + 1)
+		];
+
+		console.log(`Updated ${membership.firstName || membership.name}'s scores:`, {
+			performance: d1,
+			potential: d2,
+			employability: updatedMember.score.values[3]
+		});
+	}
+
+	/**
 	 * @param {number} employeeId
 	 */
 	function calculateWeightedScore(employeeId) {
 		let totalScore = 0;
 		let totalWeight = 0;
 
-		criteria.forEach((crit) => {
+		(criteria || []).forEach((crit) => {
 			const evaluation = evaluationGrid[employeeId]?.[crit.id];
 			if (evaluation?.score) {
 				totalScore += evaluation.score * (crit.weight / 100);
@@ -144,16 +200,16 @@
 
 	// Export functionality
 	function exportGrid() {
-		const data = employees.map((emp) => {
+		const data = (employees || []).map((emp) => {
 			/** @type {Record<string, any>} */
 			const row = {
 				Employee: emp.name,
 				Role: emp.role,
 				Department: emp.department,
-				'Weighted Score': calculateWeightedScore(emp.id)
+				'Weighted Score': calculateWeightedScore(Number(emp.id))
 			};
 
-			criteria.forEach((crit) => {
+			(criteria || []).forEach((crit) => {
 				const evaluation = evaluationGrid[emp.id]?.[crit.id];
 				row[crit.name] = evaluation?.score || 0;
 				row[`${crit.name} Notes`] = evaluation?.notes || '';
@@ -276,7 +332,7 @@
 						{showNames}
 						hideTitle={false}
 						reviewRoles={{}}
-						on:drop-member={(e) => console.log('Member dropped:', e.detail)}
+						on:drop-member={handleMemberDrop}
 						on:selected-member={(e) => console.log('Member selected:', e.detail)}
 						on:open-membership-evaluation-dialog={(e) => console.log('Open evaluation:', e.detail)}
 					/>
@@ -357,10 +413,10 @@
 								{/each}
 								<td class="px-4 py-3 text-center">
 									<div class="text-lg font-bold text-blue-600">
-										{calculateWeightedScore(employee.id)}
+										{calculateWeightedScore(Number(employee.id))}
 									</div>
 									<div class="text-xs text-gray-500">
-										{getScoreLabel(calculateWeightedScore(employee.id))}
+										{getScoreLabel(calculateWeightedScore(Number(employee.id)))}
 									</div>
 								</td>
 							</tr>
