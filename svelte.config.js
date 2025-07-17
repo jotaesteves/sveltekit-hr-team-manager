@@ -22,6 +22,18 @@ const config = {
 		paths: {
 			base: dev ? '' : (process.env.BASE_PATH ?? '')
 		},
+		prerender: {
+			handleHttpError: ({ path, message }) => {
+				// Ignore 404 errors for the root path when using a base path in production
+				if (path === '/' && !dev && process.env.BASE_PATH) {
+					console.warn(`Ignoring 404 for root path '/' - this is expected when using BASE_PATH`);
+					return;
+				}
+				// For any other errors, throw to fail the build
+				throw new Error(message);
+			},
+			entries: ['*']
+		},
 		alias: {
 			$components: path.resolve('./src/lib/components'),
 			$stores: path.resolve('./src/stores'),
