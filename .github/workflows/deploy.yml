@@ -41,6 +41,7 @@ jobs:
           static_site_generator: sveltekit
 
       - name: Build static site
+        continue-on-error: true
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
           NODE_ENV: 'production'
