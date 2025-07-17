@@ -40,15 +40,23 @@ jobs:
         with:
           static_site_generator: sveltekit
 
-      - name: Build
+      - name: Build static site
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
+          NODE_ENV: 'production'
         run: pnpm run build
+
+      - name: Verify build output
+        run: |
+          echo "Build directory contents:"
+          ls -la build/
+          echo "Build size:"
+          du -sh build/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build
+          path: './build'
 
   deploy:
     environment:
