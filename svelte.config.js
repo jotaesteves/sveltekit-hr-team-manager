@@ -20,7 +20,7 @@ const config = {
 			strict: true
 		}),
 		paths: {
-			base: dev ? '' : (process.env.BASE_PATH || '/sveltekit-hr-team-manager')
+			base: dev ? '' : process.env.BASE_PATH || '/sveltekit-hr-team-manager'
 		},
 		prerender: {
 			handleHttpError: ({ path, message }) => {
